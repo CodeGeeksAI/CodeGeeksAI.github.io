@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import { languages, type Language } from '../../lib/posts';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props as { lang: Language };
+const title = lang === 'it' ? 'Chi siamo' : 'About us';
+---
+
+<Base
+  title={title}
+  description={lang === 'it' ? 'Chi siamo · Code Geeks.' : 'About us · Code Geeks.'}
+  lang={lang}
+  activeNav="about"
+  alternatives={languages.map((language) => ({ lang: language, url: `/${language}/about/` }))}
+>
+  <header class="page-header">
+    <h1>{title}</h1>
+  </header>
+  <!-- Add the Code Geeks team introduction here when it is ready, in both languages. -->
+</Base>

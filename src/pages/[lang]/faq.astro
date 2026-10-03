@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import { siteConfig, hasFaq } from '../../config/site';
+import { languages, type Language } from '../../lib/posts';
+export function getStaticPaths() {
+  return languages.filter(hasFaq).map((lang) => ({ params: { lang }, props: { lang } }));
+}
+const { lang } = Astro.props as { lang: Language };
+const title = lang === 'it' ? 'Domande frequenti' : 'Frequently asked questions';
+---
+<Base title={title} description={title} lang={lang} activeNav="faq"
+  alternatives={languages.filter(hasFaq).map((language) => ({ lang: language, url: `/${language}/faq/` }))}>
+  <header class="page-header"><h1>{title}</h1></header>
+  <div class="faq-list">
+    {siteConfig.faq[lang].map((entry) => <details><summary>{entry.question}</summary><p>{entry.answer}</p></details>)}
+  </div>
+</Base>

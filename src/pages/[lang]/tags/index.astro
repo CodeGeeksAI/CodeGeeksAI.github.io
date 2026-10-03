@@ -1,0 +1,45 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { languages, visiblePosts, type Language } from '../../../lib/posts';
+import { getTags, tagUrl } from '../../../lib/tags';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props as { lang: Language };
+const posts = (await visiblePosts()).filter((post) => post.data.lang === lang);
+const tags = getTags(posts);
+const title = 'Tag';
+const description = lang === 'it'
+  ? 'Esplora gli articoli di Code Geeks per argomento.'
+  : 'Explore Code Geeks articles by topic.';
+---
+
+<Base
+  title={lang === 'it' ? title : 'Tags'}
+  description={description}
+  lang={lang}
+  activeNav="tags"
+  alternatives={languages.map((language) => ({ lang: language, url: `/${language}/tags/` }))}
+>
+  <header class="page-header">
+    <p class="eyebrow">Code Geeks / {lang === 'it' ? title : 'Tags'}</p>
+    <h1>{lang === 'it' ? 'Esplora per tag' : 'Explore by tag'}</h1>
+    <p class="page-description">{description}</p>
+  </header>
+
+  {tags.length === 0 ? (
+    <p class="empty-state">{lang === 'it' ? 'I tag appariranno con i primi articoli.' : 'Tags will appear with the first articles.'}</p>
+  ) : (
+    <ul class="tag-cloud" aria-label={lang === 'it' ? 'Argomenti' : 'Topics'}>
+      {tags.map((tag) => (
+        <li>
+          <a class="tag-pill" href={tagUrl(lang, tag.name)}>
+            {tag.name} <span class="tag-count">{tag.count}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )}
+</Base>

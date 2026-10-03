@@ -1,0 +1,119 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { languages, visiblePosts, type Language } from '../../lib/posts';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props as { lang: Language };
+const posts = (await visiblePosts()).filter((post) => post.data.lang === lang);
+const title = lang === 'it' ? 'Cerca' : 'Search';
+const description = lang === 'it'
+  ? 'Cerca nei titoli, nei tag e nel testo degli articoli in italiano.'
+  : 'Search titles, tags, and the full text of articles in English.';
+const initialCount = lang === 'it'
+  ? `${posts.length} ${posts.length === 1 ? 'articolo' : 'articoli'}`
+  : `${posts.length} ${posts.length === 1 ? 'article' : 'articles'}`;
+---
+
+<Base
+  title={title}
+  description={description}
+  lang={lang}
+  activeNav="search"
+  alternatives={languages.map((language) => ({ lang: language, url: `/${language}/search/` }))}
+>
+  <header class="page-header">
+    <p class="eyebrow">Code Geeks / {title}</p>
+    <h1>{title}</h1>
+    <p class="page-description">{description}</p>
+  </header>
+
+  <section data-blog-search data-language={lang} aria-label={title}>
+    <form role="search" action={`/${lang}/search/`}>
+      <label for="article-search">{lang === 'it' ? 'Cerca un articolo' : 'Search articles'}</label>
+      <input
+        class="search-field"
+        id="article-search"
+        type="search"
+        name="q"
+        autocomplete="off"
+        placeholder={lang === 'it' ? 'Titolo, argomento o parola chiave…' : 'Title, topic, or keyword…'}
+        aria-describedby="search-count"
+        disabled={posts.length === 0}
+      />
+    </form>
+
+    <noscript>
+      <p class="muted">{lang === 'it'
+        ? 'Attiva JavaScript per filtrare gli articoli. Puoi comunque consultarli tutti qui sotto.'
+        : 'Enable JavaScript to filter articles. You can still browse all articles below.'}</p>
+    </noscript>
+
+    <p id="search-count" class="muted" role="status" aria-live="polite" aria-atomic="true">{initialCount}</p>
+    <div class="search-results post-list" role="region" aria-label={lang === 'it' ? 'Risultati della ricerca' : 'Search results'}>
+      {posts.map((post) => (
+        <div class="search-result" data-search={[post.data.title, post.data.description, ...post.data.tags, post.body ?? ''].join(' ')}>
+          <PostCard post={post} />
+        </div>
+      ))}
+    </div>
+    <p class="empty-state" data-search-empty hidden={posts.length > 0}>
+      {posts.length === 0
+        ? (lang === 'it' ? 'Nessun articolo pubblicato.' : 'No published articles yet.')
+        : (lang === 'it' ? 'Nessun articolo trovato. Prova con altre parole.' : 'No articles found. Try different words.')}
+    </p>
+  </section>
+</Base>
+
+<style>
+  .search-result[hidden], [data-search-empty][hidden] { display: none; }
+</style>
+
+<script>
+  const search = document.querySelector<HTMLElement>('[data-blog-search]');
+
+  if (search) {
+    const input = search.querySelector<HTMLInputElement>('#article-search')!;
+    const form = search.querySelector<HTMLFormElement>('form')!;
+    const status = search.querySelector<HTMLElement>('#search-count')!;
+    const empty = search.querySelector<HTMLElement>('[data-search-empty]')!;
+    const language = search.dataset.language;
+    const normalize = (value: string) => value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase(language);
+    const entries = [...search.querySelectorAll<HTMLElement>('[data-search]')].map((element) => ({
+      element,
+      text: normalize(element.dataset.search ?? ''),
+    }));
+
+    const filterArticles = () => {
+      const query = input.value.trim();
+      const terms = normalize(query).split(/\s+/).filter(Boolean);
+      let count = 0;
+      for (const entry of entries) {
+        const matches = terms.every((term) => entry.text.includes(term));
+        entry.element.hidden = !matches;
+        if (matches) count += 1;
+      }
+
+      empty.hidden = count > 0;
+      status.textContent = language === 'it'
+        ? `${count} ${count === 1 ? 'articolo' : 'articoli'}${query ? ` per “${query}”` : ''}`
+        : `${count} ${count === 1 ? 'article' : 'articles'}${query ? ` for “${query}”` : ''}`;
+
+      const url = new URL(window.location.href);
+      if (query) url.searchParams.set('q', query);
+      else url.searchParams.delete('q');
+      window.history.replaceState(null, '', url);
+    };
+
+    input.value = new URLSearchParams(window.location.search).get('q') ?? '';
+    input.addEventListener('input', filterArticles);
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      filterArticles();
+    });
+    filterArticles();
+  }
+</script>

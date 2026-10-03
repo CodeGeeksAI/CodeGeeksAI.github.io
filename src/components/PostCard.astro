@@ -1,0 +1,22 @@
+---
+import { postUrl, formatDate, readingMinutes, type Post } from '../lib/posts';
+import { tagUrl } from '../lib/tags';
+interface Props { post: Post; }
+const { post } = Astro.props;
+const { lang } = post.data;
+---
+<article class="post-card">
+  {post.data.draft && <span class="draft">{lang === 'it' ? 'Bozza · solo in sviluppo' : 'Draft · development only'}</span>}
+  <h2><a href={postUrl(post)}>{post.data.title}</a></h2>
+  <p class="post-excerpt">{post.data.description}</p>
+  <div class="post-meta">
+    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, lang)}</time>
+    <span aria-hidden="true">·</span>
+    <span>{readingMinutes(post)} {lang === 'it' ? 'min di lettura' : 'min read'}</span>
+    <span aria-hidden="true">·</span>
+    <span>{post.data.author}</span>
+  </div>
+  {post.data.tags.length > 0 && <ul class="post-tags" aria-label="Tags">
+    {post.data.tags.map((tag) => <li><a href={tagUrl(lang, tag)} rel="tag">{tag}</a></li>)}
+  </ul>}
+</article>

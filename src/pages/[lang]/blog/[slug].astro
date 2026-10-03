@@ -2,7 +2,8 @@
 import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import YouTube from '../../../components/YouTube.astro';
-import { visiblePosts, postUrl, type Post } from '../../../lib/posts';
+import { visiblePosts, postUrl, readingMinutes, formatDate, type Post } from '../../../lib/posts';
+import { tagUrl } from '../../../lib/tags';
 export async function getStaticPaths() {
   return (await visiblePosts()).map((post) => ({
     params: { lang: post.data.lang, slug: post.data.urlSlug },
@@ -10,19 +11,37 @@ export async function getStaticPaths() {
   }));
 }
 const { post } = Astro.props as { post: Post };
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const { lang } = post.data;
 const related = (await visiblePosts()).filter((item) => item.data.translationKey === post.data.translationKey);
 const alternatives = related.map((item) => ({ lang: item.data.lang, url: postUrl(item) }));
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 ---
-<Base title={post.data.title} description={post.data.description} lang={post.data.lang} alternatives={alternatives}>
-  <article>
-    <h1>{post.data.title}</h1>
-    <p class="muted"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString(post.data.lang, { timeZone: 'UTC' })}</time></p>
-    {post.data.draft && <p class="draft">{post.data.lang === 'it' ? 'Bozza: non viene pubblicata' : 'Draft: excluded from publication'}</p>}
-    {related.filter((item) => item.id !== post.id).map((item) => (
-      <p><a href={postUrl(item)} lang={item.data.lang}>{item.data.lang === 'it' ? 'Leggi questo articolo in italiano' : 'Read this article in English'}</a></p>
-    ))}
+<Base title={post.data.title} description={post.data.description} lang={lang} alternatives={alternatives} activeNav="posts">
+  <article class="post-single">
+    <a class="back-link" href={`/${lang}/`}>← {lang === 'it' ? 'Tutti gli articoli' : 'All posts'}</a>
+    <header class="post-header">
+      <h1>{post.data.title}</h1>
+      <p class="post-description">{post.data.description}</p>
+      <div class="post-meta">
+        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, lang)}</time>
+        <span aria-hidden="true">·</span>
+        <span>{readingMinutes(post)} {lang === 'it' ? 'min di lettura' : 'min read'}</span>
+        <span aria-hidden="true">·</span><span>{post.data.author}</span>
+      </div>
+      {post.data.draft && <p class="draft">{lang === 'it' ? 'Bozza: non viene pubblicata' : 'Draft: excluded from publication'}</p>}
+      {related.filter((item) => item.id !== post.id).map((item) => (
+        <p class="translation-link"><a href={postUrl(item)} lang={item.data.lang} hreflang={item.data.lang}>{item.data.lang === 'it' ? 'Leggi in italiano →' : 'Read in English →'}</a></p>
+      ))}
+      {post.data.tags.length > 0 && <ul class="post-tags" aria-label="Tags">
+        {post.data.tags.map((tag) => <li><a href={tagUrl(lang, tag)} rel="tag">{tag}</a></li>)}
+      </ul>}
+    </header>
+    {toc.length > 1 && <details class="table-of-contents" open>
+      <summary>{lang === 'it' ? 'In questo articolo' : 'On this page'}</summary>
+      <ul>{toc.map((heading) => <li class:list={{ 'toc-subheading': heading.depth === 3 }}><a href={`#${heading.slug}`}>{heading.text}</a></li>)}</ul>
+    </details>}
     {post.data.youtubeId && <YouTube id={post.data.youtubeId} title={post.data.title} />}
-    <Content />
+    <div class="prose"><Content /></div>
   </article>
 </Base>

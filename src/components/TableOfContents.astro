@@ -1,0 +1,85 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  label: string;
+  showTitle?: boolean;
+}
+
+const { headings, label, showTitle = false } = Astro.props;
+const sections: { heading: MarkdownHeading; children: MarkdownHeading[] }[] = [];
+for (const heading of headings) {
+  const parent = sections.at(-1);
+  if (heading.depth === 3 && parent?.heading.depth === 2) {
+    parent.children.push(heading);
+  } else {
+    sections.push({ heading, children: [] });
+  }
+}
+---
+<nav class="toc-nav" aria-label={label} data-table-of-contents>
+  {showTitle && <h2 class="toc-title">{label}</h2>}
+  <ul class="toc-list">
+    {sections.map(({ heading, children }) => (
+      <li>
+        <a href={`#${heading.slug}`} data-heading-id={heading.slug}>{heading.text}</a>
+        {children.length > 0 && <ul>
+          {children.map((child) => <li><a href={`#${child.slug}`} data-heading-id={child.slug}>{child.text}</a></li>)}
+        </ul>}
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<script>
+  const navigations = [...document.querySelectorAll<HTMLElement>('[data-table-of-contents]')];
+  const links = navigations.flatMap((nav) => [...nav.querySelectorAll<HTMLAnchorElement>('a[data-heading-id]')]);
+  const headings = [...new Set(links.map((link) => document.getElementById(link.dataset.headingId!)))]
+    .filter((heading): heading is HTMLElement => heading !== null);
+
+  if (headings.length > 0) {
+    let activeId = '';
+    let scheduled = false;
+
+    const updateActiveHeading = () => {
+      scheduled = false;
+      let current = headings[0];
+      for (const heading of headings) {
+        if (heading.getBoundingClientRect().top > 96) break;
+        current = heading;
+      }
+      // The last section may be too short to reach the top of the viewport.
+      if (window.scrollY > 0 && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+        current = headings[headings.length - 1];
+      }
+      if (current.id !== activeId) {
+        activeId = current.id;
+        for (const link of links) {
+          if (link.dataset.headingId === activeId) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        }
+      }
+
+      const sidebar = document.querySelector<HTMLElement>('.toc-sidebar');
+      const activeLink = sidebar?.querySelector<HTMLElement>('[aria-current="location"]');
+      if (sidebar && activeLink && sidebar.clientHeight > 0) {
+        const panel = sidebar.getBoundingClientRect();
+        const active = activeLink.getBoundingClientRect();
+        if (active.top < panel.top) sidebar.scrollTop += active.top - panel.top;
+        else if (active.bottom > panel.bottom) sidebar.scrollTop += active.bottom - panel.bottom;
+      }
+    };
+
+    const scheduleUpdate = () => {
+      if (scheduled) return;
+      scheduled = true;
+      window.requestAnimationFrame(updateActiveHeading);
+    };
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+    window.addEventListener('hashchange', scheduleUpdate);
+    window.addEventListener('load', scheduleUpdate, { once: true });
+    updateActiveHeading();
+  }
+</script>

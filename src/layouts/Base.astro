@@ -9,8 +9,9 @@ interface Props {
   lang: Language;
   alternatives?: { lang: Language; url: string }[];
   activeNav?: 'posts' | 'archive' | 'search' | 'tags' | 'about' | 'faq';
+  wideArticle?: boolean;
 }
-const { title, description, lang, alternatives = [], activeNav } = Astro.props;
+const { title, description, lang, alternatives = [], activeNav, wideArticle = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const labels = lang === 'it'
   ? { posts: 'Articoli', archive: 'Archivio', search: 'Cerca', tags: 'Tags', about: 'Chi siamo', faq: 'FAQ', nav: 'Navigazione principale', languages: 'Lingua', skip: 'Vai al contenuto', theme: 'Tema scuro' }
@@ -75,7 +76,7 @@ const navigation = [
         </nav>
       </div>
     </header>
-    <main id="main" tabindex="-1"><slot /></main>
+    <main id="main" class:list={{ 'main-with-toc': wideArticle }} tabindex="-1"><slot /></main>
     <footer class="site-footer">
       <span>© {new Date().getFullYear()} <a href={`/${lang}/`}>{siteConfig.name}</a></span>
       <span>Italiano / English</span>

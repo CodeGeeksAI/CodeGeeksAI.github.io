@@ -116,8 +116,15 @@ main:focus { outline: none; }
 .translation-link { font-size: 13px; margin: 14px 0 0; }
 .table-of-contents, .faq-list details { border: 1px solid var(--border); background: var(--surface); padding: 18px 22px; border-radius: 8px; margin: 24px 0; }
 .table-of-contents summary, .faq-list summary { font-weight: 600; }
-.table-of-contents ul { padding-left: 18px; font-size: 14px; margin-bottom: 0; }
-.toc-subheading { margin-left: 18px; }
+.post-single { min-width: 0; }
+.toc-sidebar { display: none; }
+.toc-title { margin: 0 0 16px; font-size: 14px; font-weight: 650; letter-spacing: normal; }
+.toc-list, .toc-list ul { list-style: none; padding: 0; margin: 0; font-size: 13px; line-height: 1.5; }
+.toc-list ul { padding-left: 16px; }
+.toc-list a { display: block; border-left: 2px solid transparent; padding: 7px 12px; color: var(--muted); }
+.toc-list a:hover { color: var(--text); text-decoration: none; }
+.toc-list a[aria-current='location'] { color: var(--focus); border-left-color: var(--focus); font-weight: 600; }
+.toc-inline .toc-nav { margin-top: 14px; }
 .faq-list p { margin: 16px 0 0; }
 .prose { font-size: 18px; line-height: 1.85; }
 .prose h2 { margin: 40px 0 20px; font-size: 28px; }
@@ -134,6 +141,12 @@ main:focus { outline: none; }
 .archive-entry .draft { margin-bottom: 0; }
 .social-links { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 24px; font-size: 14px; }
 .site-footer { max-width: 736px; width: calc(100% - 48px); margin: 0 auto; padding: 24px 0 30px; border-top: 1px solid var(--border); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-size: 12px; color: var(--muted); }
+@media (min-width: 1100px) {
+  main.main-with-toc { width: min(100% - 80px, 1040px); }
+  .post-layout-with-toc { display: grid; grid-template-columns: minmax(0, 736px) 240px; gap: 64px; align-items: start; }
+  .toc-inline { display: none; }
+  .toc-sidebar { display: block; position: sticky; top: 24px; max-height: calc(100vh - 48px); max-height: calc(100dvh - 48px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 6px 6px 6px 20px; border-left: 1px solid var(--border); }
+}
 @media (max-width: 850px) {
   .header-inner { flex-wrap: wrap; gap: 10px 20px; padding: 16px 24px 8px; }
   .brand-tools { flex: 1; }

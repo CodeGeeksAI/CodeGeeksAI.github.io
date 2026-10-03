@@ -76,6 +76,16 @@ Dates display in the selected language using UTC. Reading time is estimated at
 200 words per minute, with a minimum of one minute.
 Set optional `youtubeId` to an 11-character YouTube video ID to show a player.
 
+### Article contents
+
+Articles with at least one Markdown `##` or `###` heading automatically show an
+index ("Indice" in Italian, "Contents" in English), with subsections nested under
+their parent section. At desktop widths of 1100px and above, the index stays in a
+sticky right sidebar; on smaller screens it appears in an expandable box before
+the article body. The current section is highlighted while scrolling. Links work
+without JavaScript, and articles without these headings keep the single-column
+layout. No frontmatter setting or manually maintained list is needed.
+
 ### Tags
 
 Use canonical English tag identifiers shared across both languages, for example

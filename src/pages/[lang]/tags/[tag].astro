@@ -1,0 +1,40 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PostCard from '../../../components/PostCard.astro';
+import { languages, visiblePosts, type Language } from '../../../lib/posts';
+import { getTags, tagUrl, postsForTag } from '../../../lib/tags';
+
+export async function getStaticPaths() {
+  const posts = await visiblePosts();
+  return languages.flatMap((lang) => getTags(posts.filter((post) => post.data.lang === lang))
+    .map((tag) => ({ params: { lang, tag: tag.slug }, props: { lang, tag: tag.name } })));
+}
+
+const { lang, tag } = Astro.props as { lang: Language; tag: string };
+const allPosts = await visiblePosts();
+const posts = postsForTag(allPosts, lang, tag);
+const alternatives = languages
+  .filter((language) => postsForTag(allPosts, language, tag).length > 0)
+  .map((language) => ({ lang: language, url: tagUrl(language, tag) }));
+const description = lang === 'it'
+  ? `Articoli di Code Geeks con il tag ${tag}.`
+  : `Code Geeks articles tagged ${tag}.`;
+const count = lang === 'it'
+  ? `${posts.length} ${posts.length === 1 ? 'articolo' : 'articoli'}`
+  : `${posts.length} ${posts.length === 1 ? 'article' : 'articles'}`;
+---
+
+<Base title={tag} description={description} lang={lang} activeNav="tags" alternatives={alternatives}>
+  <header class="page-header">
+    <p class="eyebrow"><a href={`/${lang}/tags/`}>{lang === 'it' ? 'Tutti i tag' : 'All tags'}</a> / {tag}</p>
+    <h1>{tag}</h1>
+    <p class="page-description">{count}</p>
+  </header>
+
+  <div class="post-list">
+    {posts.map((post) => <PostCard post={post} />)}
+  </div>
+  {posts.length === 0 && (
+    <p class="empty-state">{lang === 'it' ? 'Nessun articolo con questo tag.' : 'No articles with this tag.'}</p>
+  )}
+</Base>

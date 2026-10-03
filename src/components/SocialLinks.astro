@@ -1,0 +1,11 @@
+---
+import { siteConfig } from '../config/site';
+import type { Language } from '../lib/posts';
+interface Props { lang: Language; }
+const { lang } = Astro.props;
+---
+{siteConfig.features.social && siteConfig.socialLinks.length > 0 && (
+  <nav class="social-links" aria-label={lang === 'it' ? 'Seguici' : 'Follow us'}>
+    {siteConfig.socialLinks.map((link) => <a href={link.url} rel="me">{link.label}<span aria-hidden="true"> ↗</span></a>)}
+  </nav>
+)}

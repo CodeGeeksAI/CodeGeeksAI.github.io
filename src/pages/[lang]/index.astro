@@ -1,23 +1,43 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { languages, visiblePosts, postUrl, type Language } from '../../lib/posts';
+import PostCard from '../../components/PostCard.astro';
+import SocialLinks from '../../components/SocialLinks.astro';
+import { siteConfig } from '../../config/site';
+import { languages, visiblePosts, type Language } from '../../lib/posts';
+import { getTags, tagUrl } from '../../lib/tags';
 export function getStaticPaths() {
   return languages.map((lang) => ({ params: { lang }, props: { lang } }));
 }
 const { lang } = Astro.props as { lang: Language };
 const posts = (await visiblePosts()).filter((post) => post.data.lang === lang);
-const title = lang === 'it' ? 'Articoli' : 'Articles';
+const tags = getTags(posts);
+const title = lang === 'it' ? 'Articoli' : 'Posts';
 ---
-<Base title={title} description={lang === 'it' ? 'Articoli su AI e tecnologia.' : 'Articles about AI and technology.'} lang={lang}
+<Base title={title} description={siteConfig.description[lang]} lang={lang} activeNav="posts"
   alternatives={languages.map((language) => ({ lang: language, url: `/${language}/` }))}>
-  <h1>{title}</h1>
-  {posts.length === 0 && <p>{lang === 'it' ? 'Nessun articolo pubblicato.' : 'No published articles yet.'}</p>}
-  {posts.map((post) => (
-    <article>
-      <h2><a href={postUrl(post)}>{post.data.title}</a></h2>
-      <p class="muted"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString(lang, { timeZone: 'UTC' })}</time></p>
-      {post.data.draft && <p class="draft">{lang === 'it' ? 'Bozza: visibile solo in sviluppo' : 'Draft: only visible in development'}</p>}
-      <p>{post.data.description}</p>
-    </article>
-  ))}
+  <section class="home-intro" aria-labelledby="welcome">
+    <p class="eyebrow">{lang === 'it' ? 'AI, codice e tecnologia' : 'AI, code and technology'}</p>
+    <h1 id="welcome">{lang === 'it' ? 'Benvenuti su Code Geeks.' : 'Welcome to Code Geeks.'}</h1>
+    <p>{lang === 'it' ? 'Uno spazio per condividere idee, esplorare la tecnologia e raccontare ciò che impariamo, un esperimento alla volta.' : 'A space to share ideas, explore technology and document what we learn, one experiment at a time.'}</p>
+    <SocialLinks lang={lang} />
+  </section>
+  <section aria-labelledby="latest-posts">
+    <div class="section-heading">
+      <h2 id="latest-posts">{lang === 'it' ? 'Ultimi articoli' : 'Latest posts'}</h2>
+      <a href={`/${lang}/archive/`}>{lang === 'it' ? 'Archivio' : 'Archive'} <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="post-list">
+      {posts.length === 0 && <p class="empty-state">{lang === 'it' ? 'Nessun articolo pubblicato.' : 'No published posts yet.'}</p>}
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+  {tags.length > 0 && <section class="home-topics" aria-labelledby="topics">
+    <div class="section-heading">
+      <h2 id="topics">{lang === 'it' ? 'Esplora per tag' : 'Explore by tag'}</h2>
+      <a href={`/${lang}/tags/`}>{lang === 'it' ? 'Tutti i tag' : 'All tags'} <span aria-hidden="true">↗</span></a>
+    </div>
+    <ul class="tag-cloud">
+      {tags.slice(0, 8).map((tag) => <li><a class="tag-pill" href={tagUrl(lang, tag.slug)}>{tag.name}<span class="tag-count">{tag.count}</span></a></li>)}
+    </ul>
+  </section>}
 </Base>

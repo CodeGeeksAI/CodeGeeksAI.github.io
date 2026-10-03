@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import { languages, visiblePosts, postUrl, type Language, type Post } from '../../lib/posts';
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props as { lang: Language };
+const posts = (await visiblePosts()).filter((post) => post.data.lang === lang);
+const title = lang === 'it' ? 'Archivio' : 'Archive';
+const description = lang === 'it'
+  ? 'Tutti gli articoli di Code Geeks, ordinati per anno e mese.'
+  : 'All Code Geeks articles, organized by year and month.';
+const years = new Map<number, Map<number, Post[]>>();
+
+for (const post of posts) {
+  const year = post.data.pubDate.getUTCFullYear();
+  const month = post.data.pubDate.getUTCMonth();
+  if (!years.has(year)) years.set(year, new Map());
+  const months = years.get(year)!;
+  if (!months.has(month)) months.set(month, []);
+  months.get(month)!.push(post);
+}
+
+const articleCount = (count: number) => lang === 'it'
+  ? `${count} ${count === 1 ? 'articolo' : 'articoli'}`
+  : `${count} ${count === 1 ? 'article' : 'articles'}`;
+---
+
+<Base
+  title={title}
+  description={description}
+  lang={lang}
+  activeNav="archive"
+  alternatives={languages.map((language) => ({ lang: language, url: `/${language}/archive/` }))}
+>
+  <header class="page-header">
+    <p class="eyebrow">Code Geeks / {title}</p>
+    <h1>{title}</h1>
+    <p class="page-description">{description}</p>
+  </header>
+
+  {posts.length === 0 && (
+    <p class="empty-state">{lang === 'it' ? 'Nessun articolo pubblicato.' : 'No published articles yet.'}</p>
+  )}
+
+  {[...years].map(([year, months]) => (
+    <section class="archive-year" aria-labelledby={`year-${year}`}>
+      <h2 id={`year-${year}`}>
+        {year} <span class="muted">({articleCount([...months.values()].reduce((count, entries) => count + entries.length, 0))})</span>
+      </h2>
+      {[...months].map(([month, entries]) => (
+        <section class="archive-month" aria-labelledby={`month-${year}-${month}`}>
+          <h3 id={`month-${year}-${month}`}>
+            {new Date(Date.UTC(year, month, 1)).toLocaleDateString(lang, { month: 'long', timeZone: 'UTC' })}
+            <span class="muted"> ({entries.length})</span>
+          </h3>
+          <ul>
+            {entries.map((post) => (
+              <li class="archive-entry">
+                <time class="muted" datetime={post.data.pubDate.toISOString()}>
+                  {post.data.pubDate.toLocaleDateString(lang, { day: '2-digit', month: 'short', timeZone: 'UTC' })}
+                </time>
+                <a href={postUrl(post)}>{post.data.title}</a>
+                {post.data.draft && <span class="draft">{lang === 'it' ? 'Bozza' : 'Draft'}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </section>
+  ))}
+</Base>

@@ -5,6 +5,7 @@ pubDate: 2026-10-03
 lang: it
 translationKey: primo-post
 urlSlug: primo-post
+tags: [ai, technology]
 draft: false
 ---
 

@@ -5,6 +5,7 @@ pubDate: 2026-10-03
 lang: it
 translationKey: bozza-esempio
 urlSlug: bozza-esempio
+tags: [ai]
 draft: true
 ---
 

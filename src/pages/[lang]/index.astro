@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { languages, visiblePosts, postUrl, type Language } from '../../lib/posts';
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+const { lang } = Astro.props as { lang: Language };
+const posts = (await visiblePosts()).filter((post) => post.data.lang === lang);
+const title = lang === 'it' ? 'Articoli' : 'Articles';
+---
+<Base title={title} description={lang === 'it' ? 'Articoli su AI e tecnologia.' : 'Articles about AI and technology.'} lang={lang}
+  alternatives={languages.map((language) => ({ lang: language, url: `/${language}/` }))}>
+  <h1>{title}</h1>
+  {posts.length === 0 && <p>{lang === 'it' ? 'Nessun articolo pubblicato.' : 'No published articles yet.'}</p>}
+  {posts.map((post) => (
+    <article>
+      <h2><a href={postUrl(post)}>{post.data.title}</a></h2>
+      <p class="muted"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString(lang, { timeZone: 'UTC' })}</time></p>
+      {post.data.draft && <p class="draft">{lang === 'it' ? 'Bozza: visibile solo in sviluppo' : 'Draft: only visible in development'}</p>}
+      <p>{post.data.description}</p>
+    </article>
+  ))}
+</Base>

@@ -1,0 +1,28 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import YouTube from '../../../components/YouTube.astro';
+import { visiblePosts, postUrl, type Post } from '../../../lib/posts';
+export async function getStaticPaths() {
+  return (await visiblePosts()).map((post) => ({
+    params: { lang: post.data.lang, slug: post.data.urlSlug },
+    props: { post },
+  }));
+}
+const { post } = Astro.props as { post: Post };
+const { Content } = await render(post);
+const related = (await visiblePosts()).filter((item) => item.data.translationKey === post.data.translationKey);
+const alternatives = related.map((item) => ({ lang: item.data.lang, url: postUrl(item) }));
+---
+<Base title={post.data.title} description={post.data.description} lang={post.data.lang} alternatives={alternatives}>
+  <article>
+    <h1>{post.data.title}</h1>
+    <p class="muted"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString(post.data.lang, { timeZone: 'UTC' })}</time></p>
+    {post.data.draft && <p class="draft">{post.data.lang === 'it' ? 'Bozza: non viene pubblicata' : 'Draft: excluded from publication'}</p>}
+    {related.filter((item) => item.id !== post.id).map((item) => (
+      <p><a href={postUrl(item)} lang={item.data.lang}>{item.data.lang === 'it' ? 'Leggi questo articolo in italiano' : 'Read this article in English'}</a></p>
+    ))}
+    {post.data.youtubeId && <YouTube id={post.data.youtubeId} title={post.data.title} />}
+    <Content />
+  </article>
+</Base>

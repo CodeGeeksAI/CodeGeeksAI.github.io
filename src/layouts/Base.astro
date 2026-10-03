@@ -1,0 +1,49 @@
+---
+import type { Language } from '../lib/posts';
+interface Props {
+  title: string;
+  description: string;
+  lang: Language;
+  alternatives?: { lang: Language; url: string }[];
+}
+const { title, description, lang, alternatives = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | AI & Technology</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {alternatives.map((item) => <link rel="alternate" hreflang={item.lang} href={new URL(item.url, Astro.site)} />)}
+  </head>
+  <body>
+    <header>
+      <a href={`/${lang}/`}><strong>AI & Technology</strong></a>
+      <nav aria-label={lang === 'it' ? 'Lingue' : 'Languages'}>
+        <a href="/it/" lang="it">Italiano</a>
+        <a href="/en/" lang="en">English</a>
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer>AI & Technology · Italiano / English</footer>
+  </body>
+</html>
+<style is:global>
+  :root { font-family: system-ui, sans-serif; color: #172335; background: #fafbfc; }
+  body { max-width: 800px; margin: auto; padding: 24px; line-height: 1.75; }
+  header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; border-bottom: 1px solid #dce2ea; padding-bottom: 20px; }
+  nav { display: flex; gap: 18px; }
+  main { min-height: 65vh; padding: 32px 0; }
+  a { color: #185eb4; text-underline-offset: 4px; }
+  h1, h2, h3 { line-height: 1.25; }
+  h1 { font-size: clamp(2rem, 5vw, 3rem); }
+  img { max-width: 100%; height: auto; }
+  pre { overflow-x: auto; padding: 16px; border-radius: 8px; }
+  code { font-size: 0.9em; }
+  footer { border-top: 1px solid #dce2ea; padding-top: 20px; color: #536078; }
+  .muted { color: #536078; }
+  .draft { color: #8a4800; background: #fff1d6; padding: 8px 12px; }
+</style>

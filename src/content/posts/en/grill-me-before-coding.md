@@ -1,12 +1,12 @@
 ---
 title: "Grill me: questions to ask before writing code with AI"
 description: "How to use a guided discussion to clarify requirements, constraints, and decisions before handing implementation over to a coding agent."
-pubDate: 2026-10-11
+pubDate: 2026-10-16
 lang: en
 translationKey: grill-me-before-coding
 urlSlug: grill-me-before-coding
 tags: [ai, coding, agentic-engineering]
-author: Code Geeks
+author: Fedele Mantuano
 draft: true
 ---
 

@@ -1,12 +1,12 @@
 ---
 title: "Grill me: le domande da fare prima di scrivere codice con l’AI"
 description: "Come usare un confronto guidato per chiarire requisiti, vincoli e scelte prima di affidare un’implementazione a un agente di coding."
-pubDate: 2026-10-11
+pubDate: 2026-10-16
 lang: it
 translationKey: grill-me-before-coding
 urlSlug: grill-me-prima-del-codice
 tags: [ai, coding, agentic-engineering]
-author: Code Geeks
+author: Fedele Mantuano
 draft: true
 ---
 Quando affidiamo un’attività di coding a un assistente AI, spesso descriviamo il risultato che vogliamo ottenere, ma lasciamo implicite le scelte che per noi sono scontate. L’assistente deve quindi colmare quei vuoti con delle ipotesi, che possono portare a un’implementazione diversa da quella che avevamo in mente.

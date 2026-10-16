@@ -1,0 +1,24 @@
+---
+import type { Language } from '../lib/posts';
+
+interface Props {
+  author: string;
+  lang: Language;
+}
+
+const { author, lang } = Astro.props;
+const profiles: Record<string, string> = {
+  'Luca Colangiuli': 'luca-colangiuli',
+  'Fedele Mantuano': 'fedele-mantuano',
+};
+const profile = Object.hasOwn(profiles, author) ? profiles[author] : undefined;
+const href = author === 'Code Geeks'
+  ? `/${lang}/about/`
+  : profile ? `/${lang}/about/#${profile}` : undefined;
+---
+
+{href ? <a href={href} rel="author">{author}</a> : <span>{author}</span>}
+
+<style>
+  a { text-decoration: underline; }
+</style>

@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import YouTube from '../../../components/YouTube.astro';
 import TableOfContents from '../../../components/TableOfContents.astro';
+import AuthorLink from '../../../components/AuthorLink.astro';
 import { visiblePosts, postUrl, readingMinutes, formatDate, type Post } from '../../../lib/posts';
 import { tagUrl } from '../../../lib/tags';
 export async function getStaticPaths() {
@@ -30,7 +31,7 @@ const tocLabel = lang === 'it' ? 'Indice' : 'Contents';
           <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, lang)}</time>
           <span aria-hidden="true">·</span>
           <span>{readingMinutes(post)} {lang === 'it' ? 'min di lettura' : 'min read'}</span>
-          <span aria-hidden="true">·</span><span>{post.data.author}</span>
+          <span aria-hidden="true">·</span><AuthorLink author={post.data.author} lang={lang} />
         </div>
         {post.data.draft && <p class="draft">{lang === 'it' ? 'Bozza: non viene pubblicata' : 'Draft: excluded from publication'}</p>}
         {related.filter((item) => item.id !== post.id).map((item) => (

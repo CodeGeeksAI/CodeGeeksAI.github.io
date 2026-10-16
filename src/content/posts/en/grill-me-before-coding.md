@@ -7,7 +7,7 @@ translationKey: grill-me-before-coding
 urlSlug: grill-me-before-coding
 tags: [ai, coding, agentic-engineering]
 author: Fedele Mantuano
-draft: true
+draft: false
 ---
 
 When we give a coding task to an AI assistant, we often describe the outcome we want while leaving implicit the choices we take for granted. The assistant then has to fill those gaps with assumptions, which can lead to an implementation that differs from what we had in mind.

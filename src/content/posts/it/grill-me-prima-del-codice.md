@@ -7,7 +7,7 @@ translationKey: grill-me-before-coding
 urlSlug: grill-me-prima-del-codice
 tags: [ai, coding, agentic-engineering]
 author: Fedele Mantuano
-draft: true
+draft: false
 ---
 Quando affidiamo un’attività di coding a un assistente AI, spesso descriviamo il risultato che vogliamo ottenere, ma lasciamo implicite le scelte che per noi sono scontate. L’assistente deve quindi colmare quei vuoti con delle ipotesi, che possono portare a un’implementazione diversa da quella che avevamo in mente.
 Una richiesta come «aggiungi una funzione per importare un CSV» può sembrare chiara, ma lascia aperte molte domande: quali colonne accettare, come gestire righe errate o duplicati, e dove salvare i dati. Fondamentalmente c'è un disallineamento tra la richiesta e le decisioni che l’implementazione richiede. Quindi, l'agente che non ha ricevuto tutte le istruzioni necessarie, sbaglia, o meglio lo costringiamo a fare delle ipotesi.

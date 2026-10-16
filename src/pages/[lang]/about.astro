@@ -12,7 +12,7 @@ const title = lang === 'it' ? 'Chi siamo' : 'About us';
 
 <Base
   title={title}
-  description={lang === 'it' ? 'Chi siamo · Code Geeks.' : 'About us · Code Geeks.'}
+  description={lang === 'it' ? 'Luca Colangiuli e Fedele Mantuano: i progetti, le esperienze e l’uso consapevole dell’intelligenza artificiale di Code Geeks AI.' : 'Luca Colangiuli and Fedele Mantuano: the projects, experience and thoughtful approach to artificial intelligence behind Code Geeks AI.'}
   lang={lang}
   activeNav="about"
   alternatives={languages.map((language) => ({ lang: language, url: `/${language}/about/` }))}
@@ -20,5 +20,176 @@ const title = lang === 'it' ? 'Chi siamo' : 'About us';
   <header class="page-header">
     <h1>{title}</h1>
   </header>
-  <!-- Add the Code Geeks team introduction here when it is ready, in both languages. -->
+  <div class="about-content">
+    <div class="team-introduction">
+      {lang === 'it' ? (<>
+        <p>
+          Siamo <a href="#luca-colangiuli">Luca Colangiuli</a> e <a href="#fedele-mantuano">Fedele Mantuano</a>,
+          due sviluppatori accomunati dalla curiosità per la tecnologia e dalla voglia di costruire
+          strumenti utili. Code Geeks AI nasce per condividere quello che impariamo sviluppando
+          progetti, sperimentando e affrontando problemi reali.
+        </p>
+        <p>
+          Oggi ci concentriamo sull’<strong>uso consapevole dell’intelligenza artificiale</strong>:
+          comprenderne le possibilità e i limiti, imparare a usarla con criterio e sfruttarne al meglio
+          le caratteristiche nello sviluppo software e nelle attività quotidiane.
+        </p>
+        <p>
+          Progettiamo e realizziamo agenti e assistenti AI che aiutano a consultare informazioni
+          complesse e a renderle più accessibili. Uno dei nostri progetti è{' '}
+          <a href="https://tabletopassistant.com/">Tabletop Assistant</a>, nato dalla passione per i
+          giochi da tavolo e dall’idea di aiutare i giocatori a trovare risposte ai dubbi sulle regole
+          durante una partita.
+        </p>
+        <p>
+          In questo blog condividiamo esperienze, guide e riflessioni che nascono dal nostro lavoro:
+          cosa abbiamo provato, quali scelte abbiamo fatto e cosa abbiamo imparato. Crediamo
+          nell’open source, nella condivisione delle conoscenze e nel valore di verificare sul campo le idee.
+        </p>
+      </>) : (<>
+        <p>
+          We are <a href="#luca-colangiuli">Luca Colangiuli</a> and <a href="#fedele-mantuano">Fedele Mantuano</a>,
+          two developers who share a curiosity about technology and a desire to build useful tools.
+          We created Code Geeks AI to share what we learn as we develop projects, experiment and
+          tackle real problems.
+        </p>
+        <p>
+          Today, we focus on <strong>using artificial intelligence thoughtfully</strong>:
+          understanding its capabilities and limitations, learning to use it with sound judgement
+          and making the most of it in software development and everyday tasks.
+        </p>
+        <p>
+          We design and build AI agents and assistants that help people navigate complex
+          information and make it more accessible. One of our projects is{' '}
+          <a href="https://tabletopassistant.com/">Tabletop Assistant</a>, born from our passion
+          for board games and the idea of helping players find answers to rules questions during a game.
+        </p>
+        <p>
+          On this blog, we share experiences, guides and reflections drawn from our work: what we
+          tried, the choices we made and what we learned. We believe in open source, sharing
+          knowledge and putting ideas to the test in practice.
+        </p>
+      </>)}
+    </div>
+
+    <section id="luca-colangiuli" class="team-member" aria-labelledby="luca-colangiuli-heading">
+      <div class="portrait-placeholder">
+        <span aria-hidden="true">LC</span>
+        <p>{lang === 'it' ? 'Foto da aggiungere' : 'Photo coming soon'}</p>
+      </div>
+      <div class="member-description">
+        <h2 id="luca-colangiuli-heading">Luca Colangiuli</h2>
+        {lang === 'it' ? (<>
+          <p>
+            Sono uno dei due sviluppatori di Code Geeks AI. Insieme a Fedele mi occupo di progetti e
+            sperimentazioni sull’intelligenza artificiale, con particolare attenzione al suo utilizzo
+            consapevole e alle applicazioni pratiche.
+          </p>
+          <p class="profile-note">
+            Profilo provvisorio, da completare con il percorso, le competenze e gli interessi di Luca.
+          </p>
+        </>) : (<>
+          <p>
+            I am one of the two developers behind Code Geeks AI. Together with Fedele, I work on AI
+            projects and experiments, with a particular focus on thoughtful use and practical applications.
+          </p>
+          <p class="profile-note">
+            Provisional profile, to be completed with Luca’s background, skills and interests.
+          </p>
+        </>)}
+      </div>
+    </section>
+
+    <section id="fedele-mantuano" class="team-member" aria-labelledby="fedele-mantuano-heading">
+      <img
+        class="member-portrait"
+        src="/images/team/fedele-mantuano.png"
+        alt={lang === 'it' ? 'Ritratto di Fedele Mantuano' : 'Portrait of Fedele Mantuano'}
+        width="864"
+        height="1184"
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="member-description">
+        <h2 id="fedele-mantuano-heading">Fedele Mantuano</h2>
+        {lang === 'it' ? (<>
+          <p>
+            Sono un esperto di sicurezza informatica e AI Engineer, specializzato nell’analisi dello
+            spam e delle minacce veicolate tramite email. Ho creato <strong>SpamScope</strong> e{' '}
+            <a href="https://github.com/SpamScope/mail-parser"><strong>mail-parser</strong></a>, una
+            libreria Python per l’analisi delle email utilizzata anche in ambito forense.
+          </p>
+          <p>
+            Sviluppo agenti intelligenti, sistemi che collegano l’AI a fonti di conoscenza (RAG) e
+            server MCP per integrare strumenti e servizi. Lavoro con Python, LangChain e LangGraph,
+            affiancando queste tecnologie ad Elasticsearch, Ansible e AWS per costruire sistemi di
+            analisi e automazione.
+          </p>
+          <p>
+            L’open source è una parte importante del mio percorso. Con Code Geeks AI condivido questa
+            esperienza ed esploro insieme a Luca come usare l’intelligenza artificiale in modo
+            efficace, consapevole e verificabile.
+          </p>
+        </>) : (<>
+          <p>
+            I am a cybersecurity expert and AI Engineer, specialising in spam analysis and
+            email-borne threats. I created <strong>SpamScope</strong> and{' '}
+            <a href="https://github.com/SpamScope/mail-parser"><strong>mail-parser</strong></a>, a
+            Python library for email analysis that is also used in digital forensics.
+          </p>
+          <p>
+            I develop intelligent agents, systems that connect AI to knowledge sources (RAG) and
+            MCP servers that integrate tools and services. I work with Python, LangChain and
+            LangGraph, alongside Elasticsearch, Ansible and AWS, to build analysis and automation systems.
+          </p>
+          <p>
+            Open source is an important part of my work. Through Code Geeks AI, I share this
+            experience and explore with Luca how to use artificial intelligence effectively,
+            thoughtfully and in ways we can verify.
+          </p>
+        </>)}
+        <nav class="profile-links" aria-label={lang === 'it' ? 'Profili di Fedele Mantuano' : 'Fedele Mantuano’s profiles'}>
+          <a href="https://www.linkedin.com/in/fmantuano/">LinkedIn</a>
+          <a href="https://github.com/fedelemantuano">GitHub</a>
+        </nav>
+      </div>
+    </section>
+  </div>
 </Base>
+
+<style>
+  .about-content { font-size: 17px; line-height: 1.8; }
+  .about-content a { text-decoration: underline; }
+  .team-introduction { margin-bottom: 44px; }
+  .team-introduction > p:last-child { margin-bottom: 0; }
+  .team-member {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 28px;
+    align-items: start;
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+    margin-top: 36px;
+  }
+  .member-portrait, .portrait-placeholder { width: 160px; border-radius: 8px; }
+  .member-portrait { display: block; }
+  .portrait-placeholder {
+    aspect-ratio: 864 / 1184;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--tag);
+    color: var(--muted);
+  }
+  .portrait-placeholder span { font-size: 32px; font-weight: 600; }
+  .portrait-placeholder p { margin: 0; font-size: 12px; }
+  .member-description h2 { margin: 0 0 18px; }
+  .member-description > p:last-child { margin-bottom: 0; }
+  .profile-note { color: var(--muted); font-size: 14px; font-style: italic; }
+  .profile-links { display: flex; flex-wrap: wrap; gap: 20px; font-size: 15px; }
+  @media (max-width: 600px) {
+    .team-member { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  }
+</style>

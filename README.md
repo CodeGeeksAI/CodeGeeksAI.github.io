@@ -5,7 +5,7 @@ and published as static files, with a reading-focused layout, chronological
 archive, and browsing by topic.
 
 The site includes light/dark themes, article metadata and tables of contents,
-language-aware navigation, full-text search, and an empty About page. FAQ and
+language-aware navigation, full-text search, and a bilingual About page. FAQ and
 social links are prepared in the code and disabled until their content is ready.
 
 ## Setup
@@ -111,9 +111,22 @@ Without JavaScript, the page still lists all articles in the current language.
 
 ## About, FAQ, and social links
 
-`src/pages/[lang]/about.astro` contains the shared About page template. Its body is
-intentionally empty after the localized heading; replace the source comment with
-the team introduction when ready, using `lang` to select Italian or English text.
+`src/pages/[lang]/about.astro` contains the shared About page template. Both languages
+include the team introduction and individual profiles, ordered by surname:
+Luca Colangiuli, then Fedele Mantuano. Luca's photo and full biography are still to
+be supplied; the page displays a photo placeholder and a provisional profile.
+
+Link to the profiles from Italian articles with
+`[Luca Colangiuli](/it/about/#luca-colangiuli)` and
+`[Fedele Mantuano](/it/about/#fedele-mantuano)`. Keep these section IDs stable.
+Fedele's supplied portrait is stored at `public/images/team/fedele-mantuano.png`;
+add Luca's photo to the same directory when available and replace the placeholder.
+
+Article cards and article headers automatically link `author: Fedele Mantuano`
+and `author: Luca Colangiuli` to the corresponding profile in the article's language.
+The default `author: Code Geeks` links to that language's About page. Other author
+names remain plain text. These links are rendered by `src/components/AuthorLink.astro`;
+keep its profile IDs in sync with the About sections. Frontmatter remains plain text.
 
 Site identity, descriptions, and future feature settings live in
 `src/config/site.ts`:

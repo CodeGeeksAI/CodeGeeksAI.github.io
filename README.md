@@ -43,8 +43,8 @@ one language before the other is supported.
 ## Content
 
 Write Markdown in `src/content/posts/it/` and `src/content/posts/en/`.
-The repository includes one published example in each language and one Italian
-draft; replace these with your own articles when ready.
+The first article is available as a draft in Italian (`grill-me-prima-del-codice.md`)
+and English (`grill-me-before-coding.md`).
 For example, an Italian article can start with:
 
 ```yaml

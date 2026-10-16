@@ -4,3 +4,4 @@ dist/
 .env
 .env.*
 .DS_Store
+security_best_practices_report.md

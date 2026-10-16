@@ -41,16 +41,10 @@ const navigation = [
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href={canonical} />
     {alternatives.map((item) => <link rel="alternate" hreflang={item.lang} href={new URL(item.url, Astro.site)} />)}
-    <script is:inline>
-      (() => {
-        let theme;
-        try { theme = localStorage.getItem('code-geeks-theme'); } catch {}
-        document.documentElement.dataset.theme = theme === 'dark' || theme === 'light'
-          ? theme : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      })();
-    </script>
   </head>
   <body>
+    <!-- Run after Astro's CSP meta and before any visible content. -->
+    <script is:inline src="/theme-init.js"></script>
     <a class="skip-link" href="#main">{labels.skip}</a>
     <header class="site-header">
       <div class="header-inner">

@@ -4,6 +4,31 @@ export default defineConfig({
   site: 'https://CodeGeeksAI.github.io',
   output: 'static',
   trailingSlash: 'always',
+  security: {
+    csp: {
+      directives: [
+        "default-src 'self'",
+        "base-uri 'none'",
+        "object-src 'none'",
+        "form-action 'self'",
+        'frame-src https://www.youtube-nocookie.com',
+        "img-src 'self' https: data:",
+      ],
+      scriptDirective: {
+        resources: [
+          { resource: "'self'", kind: 'element' },
+          { resource: "'none'", kind: 'attribute' },
+        ],
+      },
+      styleDirective: {
+        resources: [
+          { resource: "'self'", kind: 'element' },
+          // Shiki uses style attributes; scripts and style elements remain restricted.
+          { resource: "'unsafe-inline'", kind: 'attribute' },
+        ],
+      },
+    },
+  },
   i18n: {
     locales: ['it', 'en'],
     defaultLocale: 'it',

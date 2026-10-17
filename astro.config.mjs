@@ -8,6 +8,7 @@ export default defineConfig({
     csp: {
       directives: [
         "default-src 'self'",
+        "connect-src 'self' https://cloudflareinsights.com",
         "base-uri 'none'",
         "object-src 'none'",
         "form-action 'self'",
@@ -17,6 +18,7 @@ export default defineConfig({
       scriptDirective: {
         resources: [
           { resource: "'self'", kind: 'element' },
+          { resource: 'https://static.cloudflareinsights.com/beacon.min.js', kind: 'element' },
           { resource: "'none'", kind: 'attribute' },
         ],
       },

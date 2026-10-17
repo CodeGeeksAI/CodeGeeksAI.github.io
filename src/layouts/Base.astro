@@ -89,5 +89,13 @@ const navigation = [
         });
       }
     </script>
+    {import.meta.env.PROD && (
+      <script
+        is:inline
+        type="module"
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon='{"token": "8d24179560e24250994db7de79af9cd1"}'
+      ></script>
+    )}
   </body>
 </html>

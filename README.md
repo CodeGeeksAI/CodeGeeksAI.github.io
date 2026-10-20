@@ -76,6 +76,43 @@ Dates display in the selected language using UTC. Reading time is estimated at
 200 words per minute, with a minimum of one minute.
 Set optional `youtubeId` to an 11-character YouTube video ID to show a player.
 
+### Article covers
+
+Add a single WebP file to `public/images/posts/`, named after the article's
+`translationKey`. The article template automatically displays it above the title
+in both languages. No frontmatter image field or Markdown image is needed.
+Articles without a matching file display normally, without an empty placeholder.
+File names are case-sensitive; use the exact translation key and `.webp` extension.
+
+For example, both translations of the grill-me article use
+`translationKey: grill-me-before-coding`, so their shared cover is:
+
+```text
+public/images/posts/grill-me-before-coding.webp
+```
+
+Prepare all covers at **1600 × 900 pixels (16:9)** and export as WebP, ideally
+under 300 KB. Verify dimensions after AI generation and resize or crop before
+adding the file. The template reserves a 16:9 area to prevent layout shifts,
+scales it to the article width on every screen, and crops other aspect ratios
+to fit. It does not convert files or enforce their source pixel dimensions.
+Keep important elements away from the edges. Use a consistent illustration
+style and palette, without text, logos, or watermarks, so one image works in
+both languages. These covers are decorative introductions to the article;
+their empty alternative text avoids repeating the adjacent article title.
+Keep any information needed to understand the article in its text.
+
+Reusable generation prompt (replace the bracketed subjects):
+
+> Crea una copertina editoriale per un articolo su [ARGOMENTO]. Illustrazione
+> vettoriale con contorni netti, forme semplici, palette coerente e composizione
+> orizzontale. Rappresenta visivamente [CONCETTO PRINCIPALE]. Nessun testo,
+> lettering, logo o watermark. Rapporto 16:9, dimensioni finali 1600 × 900 pixel.
+
+Run `npm run dev` to inspect the cover, then `npm run verify`. Adding or replacing
+a cover on the published site requires a new build and deployment, like other
+content changes. Covers appear on individual articles; list cards remain text-only.
+
 ### Article contents
 
 Articles with at least one Markdown `##` or `###` heading automatically show an

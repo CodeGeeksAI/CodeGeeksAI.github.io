@@ -112,6 +112,7 @@ main:focus { outline: none; }
 #search-count { margin: 16px 0 24px; font-size: 13px; }
 .back-link { display: inline-block; color: var(--muted); font-size: 13px; margin-bottom: 32px; }
 .post-header { margin-bottom: 36px; }
+.post-cover { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; margin-bottom: 24px; }
 .post-description { color: var(--muted); font-size: 18px; margin-bottom: 20px; }
 .translation-link { font-size: 13px; margin: 14px 0 0; }
 .table-of-contents, .faq-list details { border: 1px solid var(--border); background: var(--surface); padding: 18px 22px; border-radius: 8px; margin: 24px 0; }

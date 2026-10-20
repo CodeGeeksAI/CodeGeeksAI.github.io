@@ -6,6 +6,7 @@ import TableOfContents from '../../../components/TableOfContents.astro';
 import AuthorLink from '../../../components/AuthorLink.astro';
 import { visiblePosts, postUrl, readingMinutes, formatDate, type Post } from '../../../lib/posts';
 import { tagUrl } from '../../../lib/tags';
+import { postCoverUrl } from '../../../lib/covers';
 export async function getStaticPaths() {
   return (await visiblePosts()).map((post) => ({
     params: { lang: post.data.lang, slug: post.data.urlSlug },
@@ -15,6 +16,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props as { post: Post };
 const { Content, headings } = await render(post);
 const { lang } = post.data;
+const coverUrl = postCoverUrl(post.data.translationKey);
 const related = (await visiblePosts()).filter((item) => item.data.translationKey === post.data.translationKey);
 const alternatives = related.map((item) => ({ lang: item.data.lang, url: postUrl(item) }));
 const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
@@ -25,6 +27,7 @@ const tocLabel = lang === 'it' ? 'Indice' : 'Contents';
     <article class="post-single">
       <a class="back-link" href={`/${lang}/`}>← {lang === 'it' ? 'Tutti gli articoli' : 'All posts'}</a>
       <header class="post-header">
+        {coverUrl && <img class="post-cover" src={coverUrl} alt="" width="1600" height="900" loading="eager" fetchpriority="high" />}
         <h1>{post.data.title}</h1>
         <p class="post-description">{post.data.description}</p>
         <div class="post-meta">
